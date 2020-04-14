@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtWidgets import QApplication, QWidget, QShortcut
 from PyQt5.QtWidgets import QPushButton, QLineEdit, QLabel
-from PyQt5.QtGui import QPixmap, QImage
+from PyQt5.QtGui import QPixmap, QImage, QKeySequence
 import sys
 from geocoderAPI import get_cords
 from mapsAPI import get_image
@@ -27,7 +27,8 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.setGeometry(400, 400, *SCREEN_SIZE)
+        self.move(400, 400)
+        self.setFixedSize(*SCREEN_SIZE)
         self.setWindowTitle('Отображение картинки')
         self.draw = QPixmap(self.image)
         self.image1 = QLabel(self)
@@ -36,22 +37,35 @@ class Example(QWidget):
         self.image1.setPixmap(self.draw)
 
         self.searchbar = QTextEdit(self)
-        self.searchbar.setGeometry(0, 0, 250, 60)
+        self.searchbar.setAcceptRichText(False)
+        self.searchbar.setGeometry(0, 0, 250, 50)
 
         self.searchbutton = QPushButton(self, text='search')
         self.searchbutton.setGeometry(250, 0, 60, 25)
         self.searchbutton.action = 'start_search'
         self.searchbutton.clicked.connect(self.onClick)
 
-        self.zoomup = QPushButton(self, text='Z+')
-        self.zoomup.setGeometry(300, 0, 40, 40)
+        key_enter = QShortcut(QKeySequence('enter'), self)
+        key_enter.action = 'search'
+        key_enter.activated.connect(self.onClick)
+
+        self.zoomup = QPushButton(self, text='+')
+        self.zoomup.setGeometry(250, 25, 30, 25)
         self.zoomup.action = 'zoomplus'
         self.zoomup.clicked.connect(self.onClick)
 
-        self.zoomdown = QPushButton(self, text='Z-')
-        self.zoomdown.setGeometry(340, 0, 40, 40)
+        key_pageup = QShortcut(QKeySequence('PgUp'), self)
+        key_pageup.action = 'zoomplus'
+        key_pageup.activated.connect(self.onClick)
+
+        self.zoomdown = QPushButton(self, text='-')
+        self.zoomdown.setGeometry(280, 25, 30, 25)
         self.zoomdown.action = 'zoomminus'
         self.zoomdown.clicked.connect(self.onClick)
+
+        key_pagedown = QShortcut(QKeySequence('PgDown'), self)
+        key_pagedown.action = 'zoomminus'
+        key_pagedown.activated.connect(self.onClick)
 
     def updateUI(self):
         self.draw = QPixmap(self.image)
@@ -65,7 +79,7 @@ class Example(QWidget):
                 get_image_from_toponym(self.searchbar.toPlainText())
                 self.updateUI()
             if self.sender().action == 'zoomplus':
-                if zoom < 13:
+                if zoom < 18:
                     zoom += 1
                     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
 
