@@ -12,6 +12,7 @@ actual_cords = [0, 0]
 zoom = 9
 
 def get_image_from_toponym(req):
+    global actual_cords
     actual_cords = get_cords(req)
     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
 
@@ -69,12 +70,14 @@ class Example(QWidget):
                 if zoom < 13:
                     zoom += 1
                     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    print(zoom)
                     self.updateUI()
 
             if self.sender().action == 'zoomminus':
                 if zoom > 4:
                     zoom -= 1
                     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    print(zoom)
                     self.updateUI()
 
         except Exception as e:

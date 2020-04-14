@@ -16,6 +16,7 @@ def get_image(toponym_longitude, toponym_lattitude, delta='0.005', zoom=10):
             map_params["spn"] = ",".join([delta, delta])
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         pic = requests.get(map_api_server, params=map_params)
+        print(pic.url)
 
         if pic.content:
             with open("main_image.png", 'wb') as f:
