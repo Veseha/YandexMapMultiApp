@@ -9,10 +9,11 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLi
 
 
 actual_cords = [0, 0]
+zoom = 9
 
 def get_image_from_toponym(req):
     actual_cords = get_cords(req)
-    get_image(actual_cords[0], actual_cords[1])
+    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
 
 
 SCREEN_SIZE = [400, 500]
@@ -44,10 +45,14 @@ class Example(QWidget):
         self.zoomup = QPushButton(self, text='Z+')
         self.zoomup.setGeometry(300, 0, 40, 40)
         self.zoomup.action = 'zoomplus'
+        self.zoomup.clicked.connect(self.onClick)
+
 
         self.zoomdown = QPushButton(self, text='Z-')
         self.zoomdown.setGeometry(340, 0, 40, 40)
         self.zoomdown.action = 'zoomminus'
+        self.zoomdown.clicked.connect(self.onClick)
+
 
 
     def updateUI(self):
@@ -55,10 +60,23 @@ class Example(QWidget):
         self.image1.setPixmap(self.draw)
 
     def onClick(self):
+        global zoom, actual_cords
         try:
             if self.sender().action == 'start_search':
                 get_image_from_toponym(self.searchbar.toPlainText())
                 self.updateUI()
+            if self.sender().action == 'zoomplus':
+                if zoom < 13:
+                    zoom += 1
+                    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    self.updateUI()
+
+            if self.sender().action == 'zoomminus':
+                if zoom > 4:
+                    zoom -= 1
+                    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    self.updateUI()
+
         except Exception as e:
             print('error in onClick(), stack:', e)
 

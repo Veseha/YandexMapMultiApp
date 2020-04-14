@@ -2,7 +2,10 @@ import requests
 
 
 def get_image(toponym_longitude, toponym_lattitude, delta='0.005', zoom=10):
+    toponym_lattitude = str(toponym_lattitude)
+    toponym_longitude = str(toponym_longitude)
     try:
+
         map_params = {
             "ll": ",".join([toponym_longitude, toponym_lattitude]),
             "l": "map"
