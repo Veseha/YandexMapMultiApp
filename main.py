@@ -8,9 +8,11 @@ from PIL import Image
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLineEdit, QLabel, QTextEdit
 
 
+actual_cords = [0, 0]
+
 def get_image_from_toponym(req):
-    res = get_cords(req)
-    get_image(res[0], res[1])
+    actual_cords = get_cords(req)
+    get_image(actual_cords[0], actual_cords[1])
 
 
 SCREEN_SIZE = [400, 500]
@@ -32,12 +34,21 @@ class Example(QWidget):
         self.image1.setPixmap(self.draw)
 
         self.searchbar = QTextEdit(self)
-        self.searchbar.setGeometry(0, 0, 250, 25)
+        self.searchbar.setGeometry(0, 0, 250, 60)
 
         self.searchbutton = QPushButton(self, text='search')
         self.searchbutton.setGeometry(250, 0, 60, 25)
         self.searchbutton.action = 'start_search'
         self.searchbutton.clicked.connect(self.onClick)
+
+        self.zoomup = QPushButton(self, text='Z+')
+        self.zoomup.setGeometry(300, 0, 40, 40)
+        self.zoomup.action = 'zoomplus'
+
+        self.zoomdown = QPushButton(self, text='Z-')
+        self.zoomdown.setGeometry(340, 0, 40, 40)
+        self.zoomdown.action = 'zoomminus'
+
 
     def updateUI(self):
         self.draw = QPixmap(self.image)
