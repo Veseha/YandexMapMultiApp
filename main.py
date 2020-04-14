@@ -13,6 +13,7 @@ actual_cords = [0, 0]
 zoom = 9
 lmap = 'map'
 SCREEN_SIZE = [600, 550]
+step = 0.0005
 
 # ------------------------------ func -----------------------------
 
@@ -27,7 +28,7 @@ def get_image_from_toponym(req):
     get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
 
 
-get_image_from_toponym(input())
+get_image_from_toponym('Moscow')
 
 
 # -------------------------- pyqt ----------------------------
@@ -95,6 +96,42 @@ class Example(QWidget):
         self.map4.action = 'trf'
         self.map4.clicked.connect(self.onClick)
 
+        self.up = QPushButton(self, text='^')
+        self.up.setGeometry(400, 0, 30, 25)
+        self.up.action = 'up'
+        self.up.clicked.connect(self.onClick)
+
+        key_up = QShortcut(QKeySequence('MoveToPreviousLine'), self)
+        key_up.action = 'up'
+        key_up.activated.connect(self.onClick)
+
+        self.down = QPushButton(self, text='v')
+        self.down.setGeometry(400, 25, 30, 25)
+        self.down.action = 'down'
+        self.down.clicked.connect(self.onClick)
+
+        key_down = QShortcut(QKeySequence('MoveToNextLine'), self)
+        key_down.action = 'down'
+        key_down.activated.connect(self.onClick)
+
+        self.right = QPushButton(self, text='>')
+        self.right.setGeometry(430, 25, 30, 25)
+        self.right.action = 'right'
+        self.right.clicked.connect(self.onClick)
+
+        key_right = QShortcut(QKeySequence('MoveToNextChar'), self)
+        key_right.action = 'right'
+        key_right.activated.connect(self.onClick)
+
+        self.left = QPushButton(self, text='<')
+        self.left.setGeometry(370, 25, 30, 25)
+        self.left.action = 'left'
+        self.left.clicked.connect(self.onClick)
+
+        key_left = QShortcut(QKeySequence('MoveToPreviousChar'), self)
+        key_left.action = 'left'
+        key_left.activated.connect(self.onClick)
+
         key_pagedown = QShortcut(QKeySequence('PgDown'), self)
         key_pagedown.action = 'zoomminus'
         key_pagedown.activated.connect(self.onClick)
@@ -106,7 +143,7 @@ class Example(QWidget):
     def onClick(self):
         global zoom, actual_cords, lmap
         try:
-            print('zoom is', zoom, 'cords are', actual_cords)
+            # ------------------------------ print('zoom is', zoom, 'cords are', actual_cords)
             if self.sender().action == 'start_search':
                 get_image_from_toponym(self.searchbar.toPlainText())
                 self.updateUI()
@@ -131,6 +168,31 @@ class Example(QWidget):
             if self.sender().action == 'trf':
                 lmap = 'trf'
                 upd_map()
+            if self.sender().action == 'up':
+                if zoom <= 9:
+                    actual_cords[0] = str(float(actual_cords[1]) + step * (19 - zoom) * (19 - zoom) ** 2)
+                else:
+                    actual_cords[1] = str(float(actual_cords[1]) + step * (19 - zoom) * (19 - zoom))
+                upd_map()
+            if self.sender().action == 'down':
+                if zoom <= 9:
+                    actual_cords[0] = str(float(actual_cords[1]) - step * (19 - zoom) * (19 - zoom) ** 2)
+                else:
+                    actual_cords[1] = str(float(actual_cords[1]) - step * (19 - zoom) * (19 - zoom))
+                upd_map()
+            if self.sender().action == 'right':
+                if zoom <= 9:
+                    actual_cords[0] = str(float(actual_cords[0]) + step * (19 - zoom) * (19 - zoom) ** 2)
+                else:
+                    actual_cords[0] = str(float(actual_cords[0]) + step * (19 - zoom) * (19 - zoom))
+                upd_map()
+            if self.sender().action == 'left':
+                if zoom <= 9:
+                    actual_cords[0] = str(float(actual_cords[0]) - step * (19 - zoom) * (19 - zoom) ** 2)
+                else:
+                    actual_cords[0] = str(float(actual_cords[0]) - step * (19 - zoom) * (19 - zoom))
+                upd_map()
+
 
             self.updateUI()
         except Exception as e:

@@ -15,16 +15,16 @@ def get_image(toponym_longitude, toponym_lattitude, delta='0.005', zoom=10, l='s
             map_params["z"] = zoom
         else:
             map_params["spn"] = ",".join([delta, delta])
-        # print('map_params are', map_params)
+        # -------------------------------------------------------- print('map_params are', map_params)
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         pic = requests.get(map_api_server, params=map_params)
-        # print(pic.url)
+        # ---------------------------------------------------print(pic.url)
 
         if pic.content and l != 'sat':
             with open("main_image.png", 'wb') as f:
                 f.write(pic.content)
         elif pic.content:
-            print('select jpg format')
+            # ----------------------------------------print('select jpg format')
             with open("main_image.jpg", 'wb') as f:
                 f.write(pic.content)
             im1 = Image.open(r'main_image.jpg')
