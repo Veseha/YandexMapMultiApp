@@ -43,7 +43,6 @@ class Example(QWidget):
         self.draw = QPixmap(self.image)
         self.image1.setPixmap(self.draw)
 
-
     def onClick(self):
         try:
             if self.sender().action == 'start_search':
