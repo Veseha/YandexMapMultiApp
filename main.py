@@ -17,7 +17,7 @@ def get_image_from_toponym(req):
     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
 
 
-SCREEN_SIZE = [400, 500]
+SCREEN_SIZE = [600, 550]
 
 
 class Example(QWidget):
@@ -32,8 +32,8 @@ class Example(QWidget):
         self.setWindowTitle('Отображение картинки')
         self.draw = QPixmap(self.image)
         self.image1 = QLabel(self)
-        self.image1.move(10, 100)
-        self.image1.resize(400, 400)
+        self.image1.move(0, 100)
+        self.image1.resize(600, 450)
         self.image1.setPixmap(self.draw)
 
         self.searchbar = QTextEdit(self)
