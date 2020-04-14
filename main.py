@@ -7,9 +7,9 @@ from mapsAPI import get_image
 from PIL import Image
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLineEdit, QLabel, QTextEdit
 
-
 actual_cords = [0, 0]
 zoom = 9
+
 
 def get_image_from_toponym(req):
     global actual_cords
@@ -48,13 +48,10 @@ class Example(QWidget):
         self.zoomup.action = 'zoomplus'
         self.zoomup.clicked.connect(self.onClick)
 
-
         self.zoomdown = QPushButton(self, text='Z-')
         self.zoomdown.setGeometry(340, 0, 40, 40)
         self.zoomdown.action = 'zoomminus'
         self.zoomdown.clicked.connect(self.onClick)
-
-
 
     def updateUI(self):
         self.draw = QPixmap(self.image)
@@ -63,6 +60,7 @@ class Example(QWidget):
     def onClick(self):
         global zoom, actual_cords
         try:
+            print('zoom is', zoom, 'cords are', actual_cords)
             if self.sender().action == 'start_search':
                 get_image_from_toponym(self.searchbar.toPlainText())
                 self.updateUI()
@@ -70,16 +68,13 @@ class Example(QWidget):
                 if zoom < 13:
                     zoom += 1
                     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
-                    print(zoom)
-                    self.updateUI()
 
             if self.sender().action == 'zoomminus':
                 if zoom > 4:
                     zoom -= 1
                     get_image(actual_cords[0], actual_cords[1], zoom=zoom)
-                    print(zoom)
-                    self.updateUI()
 
+            self.updateUI()
         except Exception as e:
             print('error in onClick(), stack:', e)
 

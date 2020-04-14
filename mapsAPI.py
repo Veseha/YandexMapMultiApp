@@ -10,10 +10,11 @@ def get_image(toponym_longitude, toponym_lattitude, delta='0.005', zoom=10):
             "ll": ",".join([toponym_longitude, toponym_lattitude]),
             "l": "map"
         }
-        if zoom:
-            map_params["zoom"] = zoom
+        if zoom != -1:
+            map_params["z"] = zoom
         else:
             map_params["spn"] = ",".join([delta, delta])
+        print('map_params are', map_params)
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         pic = requests.get(map_api_server, params=map_params)
         print(pic.url)
