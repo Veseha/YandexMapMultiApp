@@ -7,18 +7,30 @@ from mapsAPI import get_image
 from PIL import Image
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLineEdit, QLabel, QTextEdit
 
+# ------------------------ global variable -------------------------
+
 actual_cords = [0, 0]
 zoom = 9
+lmap = 'map'
+SCREEN_SIZE = [600, 550]
+
+# ------------------------------ func -----------------------------
+
+
+def upd_map():
+    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
 
 
 def get_image_from_toponym(req):
     global actual_cords
     actual_cords = get_cords(req)
-    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
 
 
-SCREEN_SIZE = [600, 550]
+get_image_from_toponym(input())
 
+
+# -------------------------- pyqt ----------------------------
 
 class Example(QWidget):
     def __init__(self):
@@ -63,6 +75,26 @@ class Example(QWidget):
         self.zoomdown.action = 'zoomminus'
         self.zoomdown.clicked.connect(self.onClick)
 
+        self.map1 = QPushButton(self, text='map')
+        self.map1.setGeometry(310, 0, 30, 25)
+        self.map1.action = 'map'
+        self.map1.clicked.connect(self.onClick)
+
+        self.map2 = QPushButton(self, text='sat')
+        self.map2.setGeometry(310, 25, 30, 25)
+        self.map2.action = 'sat'
+        self.map2.clicked.connect(self.onClick)
+
+        self.map3 = QPushButton(self, text='skl')
+        self.map3.setGeometry(340, 0, 30, 25)
+        self.map3.action = 'skl'
+        self.map3.clicked.connect(self.onClick)
+
+        self.map4 = QPushButton(self, text='trf')
+        self.map4.setGeometry(340, 25, 30, 25)
+        self.map4.action = 'trf'
+        self.map4.clicked.connect(self.onClick)
+
         key_pagedown = QShortcut(QKeySequence('PgDown'), self)
         key_pagedown.action = 'zoomminus'
         key_pagedown.activated.connect(self.onClick)
@@ -72,7 +104,7 @@ class Example(QWidget):
         self.image1.setPixmap(self.draw)
 
     def onClick(self):
-        global zoom, actual_cords
+        global zoom, actual_cords, lmap
         try:
             print('zoom is', zoom, 'cords are', actual_cords)
             if self.sender().action == 'start_search':
@@ -81,12 +113,24 @@ class Example(QWidget):
             if self.sender().action == 'zoomplus':
                 if zoom < 18:
                     zoom += 1
-                    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    upd_map()
 
             if self.sender().action == 'zoomminus':
                 if zoom > 4:
                     zoom -= 1
-                    get_image(actual_cords[0], actual_cords[1], zoom=zoom)
+                    upd_map()
+            if self.sender().action == 'map':
+                lmap = 'map'
+                upd_map()
+            if self.sender().action == 'sat':
+                lmap = 'sat'
+                upd_map()
+            if self.sender().action == 'skl':
+                lmap = 'skl'
+                upd_map()
+            if self.sender().action == 'trf':
+                lmap = 'trf'
+                upd_map()
 
             self.updateUI()
         except Exception as e:
