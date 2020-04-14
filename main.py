@@ -41,6 +41,8 @@ class Example(QWidget):
 
     def updateUI(self):
         self.draw = QPixmap(self.image)
+        self.image1.setPixmap(self.draw)
+
 
     def onClick(self):
         try:
