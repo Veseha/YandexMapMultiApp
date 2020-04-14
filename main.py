@@ -33,62 +33,9 @@ class Example(QWidget):
         self.image1.resize(350, 350)
         self.image1.setPixmap(self.draw)
 
-        self.rotateplus = QPushButton('Повернуть направо', self)
-        self.rotateplus.setGeometry(10, 10, 160, 40)
-        self.rotateplus.clicked.connect(self.rotate)
-        self.rotatemin = QPushButton('Повернуть налево', self)
-        self.rotatemin.setGeometry(230, 10, 160, 40)
-        self.rotatemin.clicked.connect(self.rotate)
-        self.r = QPushButton('R', self)
-        self.g = QPushButton('G', self)
-        self.b = QPushButton('B', self)
-        self.r.setGeometry(10, 60, 50, 50)
-        self.g.setGeometry(70, 60, 50, 50)
-        self.b.setGeometry(130, 60, 50, 50)
-        self.r.clicked.connect(self.onClick)
-        self.g.clicked.connect(self.onClick)
-        self.b.clicked.connect(self.onClick)
-
-        self.noup = QPushButton('ГДЕ МОИ ЦВЕТА?', self)
-        self.noup.setGeometry(190, 60, 200, 50)
-        self.noup.clicked.connect(self.onClick)
-
-    def rotate(self):
-        try:
-            im = Image.open(self.image)
-            if self.sender().text() == 'Повернуть направо':
-                rot = -90
-            else:
-                rot = 90
-            im1 = im.rotate(rot, expand=True)
-            im1.save('imagene.jpg')
-            self.draw.load('imagene.jpg')
-            self.image = 'imagene.jpg'
-            self.image1.setPixmap(self.draw)
-        except Exception as e:
-            print('error in rotate(), stack:', e)
-
     def onClick(self):
         try:
-            im = Image.open('main_image.png')
-            x, y = im.size
-            pix = im.load()
-            for i in range(x):
-                for j in range(y):
-                    r, g, b = pix[i, j]
-                    if self.sender().text() == 'R':
-                        pix[i, j] = r, 0, 0
-                    elif self.sender().text() == 'G':
-                        pix[i, j] = 0, g, 0
-                    elif self.sender().text() == 'B':
-                        pix[i, j] = 0, 0, b
-                    else:
-                        pass
-
-            im.save('imagene.jpg')
-            self.draw.load('imagene.jpg')
-            self.image = 'imagene.jpg'
-            self.image1.setPixmap(self.draw)
+            pass
         except Exception as e:
             print('error in onClick(), stack:', e)
 
