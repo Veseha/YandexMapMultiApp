@@ -8,12 +8,10 @@ from PIL import Image
 from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLineEdit, QLabel, QTextEdit
 
 
-def get_image_from_cords(req):
+def get_image_from_toponym(req):
     res = get_cords(req)
     get_image(res[0], res[1])
 
-
-get_image_from_cords(input('Input your adress'))
 
 SCREEN_SIZE = [400, 500]
 
@@ -30,12 +28,25 @@ class Example(QWidget):
         self.draw = QPixmap(self.image)
         self.image1 = QLabel(self)
         self.image1.move(10, 100)
-        self.image1.resize(350, 350)
+        self.image1.resize(400, 400)
         self.image1.setPixmap(self.draw)
+
+        self.searchbar = QTextEdit(self)
+        self.searchbar.setGeometry(0, 0, 250, 25)
+
+        self.searchbutton = QPushButton(self, text='search')
+        self.searchbutton.setGeometry(250, 0, 60, 25)
+        self.searchbutton.action = 'start_search'
+        self.searchbutton.clicked.connect(self.onClick)
+
+    def updateUI(self):
+        self.draw = QPixmap(self.image)
 
     def onClick(self):
         try:
-            pass
+            if self.sender().action == 'start_search':
+                get_image_from_toponym(self.searchbar.toPlainText())
+                self.updateUI()
         except Exception as e:
             print('error in onClick(), stack:', e)
 
