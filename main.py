@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLi
 actual_cords = [0, 0]
 zoom = 9
 lmap = 'map'
+flags = []
 SCREEN_SIZE = [600, 550]
 step = 0.0005
 
@@ -48,6 +49,7 @@ class Example(QWidget):
         self.image1.move(0, 100)
         self.image1.resize(600, 450)
         self.image1.setPixmap(self.draw)
+        self.image1.mouseReleaseEvent = self.myfunction
 
         self.searchbar = QTextEdit(self)
         self.searchbar.setAcceptRichText(False)
@@ -145,7 +147,9 @@ class Example(QWidget):
         try:
             # ------------------------------ print('zoom is', zoom, 'cords are', actual_cords)
             if self.sender().action == 'start_search':
+                flags.append()
                 get_image_from_toponym(self.searchbar.toPlainText())
+
                 self.updateUI()
             if self.sender().action == 'zoomplus':
                 if zoom < 18:
@@ -192,7 +196,6 @@ class Example(QWidget):
                 else:
                     actual_cords[0] = str(float(actual_cords[0]) - step * (19 - zoom) * (19 - zoom))
                 upd_map()
-
 
             self.updateUI()
         except Exception as e:
