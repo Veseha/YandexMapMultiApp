@@ -22,17 +22,18 @@ step = 0.0005
 
 def upd_map():
     get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap, pt=flags)
-    print(flags)
+    print('>> Flags: ', flags)
 
 
 def get_image_from_toponym(req):
     global actual_cords, metadata
     actual_cords, metadata = get_cords(req)
     flags.append(actual_cords[:])
-    print(flags)
+    print('>> Add new flag, new list: ', flags)
     get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap, pt=flags)
 
 
+print('>> Set pos: Moscow')
 get_image_from_toponym('Moscow')
 
 
@@ -143,6 +144,11 @@ class Example(QWidget):
         self.clear.action = 'clearflag'
         self.clear.clicked.connect(self.onClick)
 
+        self.clear1 = QPushButton(self, text='Clear down')
+        self.clear1.setGeometry(460, 25, 60, 25)
+        self.clear1.action = 'clearaddress'
+        self.clear1.clicked.connect(self.onClick)
+
         key_pagedown = QShortcut(QKeySequence('PgDown'), self)
         key_pagedown.action = 'zoomminus'
         key_pagedown.activated.connect(self.onClick)
@@ -157,30 +163,32 @@ class Example(QWidget):
         self.fullAdress.setPlainText(self.fulladdressrenderer(metadata))
 
     def fulladdressrenderer(self, metadata):
-        print(metadata)
+        print('>> Info about metadata: ', metadata)
 
-        final, ishouse = '', False
+        final, ishouse = [], False
         for i in metadata:
             kind, name = i['kind'], i['name']
             if kind == 'house':
                 ishouse = True
             template = '%s: %s; ' % (kind, name)
-            final += template
-        return final
+            final.append(template.split(': ')[1][:-2])
+
+        return ', '.join(final)
 
     def onClick(self):
         global zoom, actual_cords, lmap
         try:
             # ------------------------------ print('zoom is', zoom, 'cords are', actual_cords)
+            if self.sender().action == 'clearaddress':
+                print('>> Address clear')
+                self.fullAdress.setPlainText('')
             if self.sender().action == 'clearflag':
                 global flags
                 flags = []
                 upd_map()
             if self.sender().action == 'start_search':
-                # flags.append()
                 get_image_from_toponym(self.searchbar.toPlainText())
-
-                self.updateUI()
+                # self.updateUI()
             if self.sender().action == 'zoomplus':
                 if zoom < 18:
                     zoom += 1
@@ -226,8 +234,8 @@ class Example(QWidget):
                 else:
                     actual_cords[0] = str(float(actual_cords[0]) - step * (19 - zoom) * (19 - zoom))
                 upd_map()
-
-            self.updateUI()
+            if self.sender().action != 'clearaddress':
+                self.updateUI()
         except Exception as e:
             print('error in onClick(), stack:', e)
 

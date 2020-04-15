@@ -18,5 +18,5 @@ def get_cords(toponym_to_find, apikey='40d1649f-0493-4b70-98ba-98533de7710b', fo
     metadata = toponym['metaDataProperty']['GeocoderMetaData']['Address']['Components']
     if 'postal_code' in toponym['metaDataProperty']['GeocoderMetaData']['Address'].keys():
         postal = toponym['metaDataProperty']['GeocoderMetaData']['Address']['postal_code']
-    pprint(toponym['metaDataProperty']['GeocoderMetaData']['Address'])
+    # pprint(toponym['metaDataProperty']['GeocoderMetaData']['Address'])
     return toponym_coodrinates.split(), metadata

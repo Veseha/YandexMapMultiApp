@@ -24,7 +24,7 @@ def get_image(toponym_longitude, toponym_lattitude, delta='0.005', zoom=10, l='s
             # -------------------------------------------------------- print('map_params are', map_params)
         map_api_server = "http://static-maps.yandex.ru/1.x/"
         pic = requests.get(map_api_server, params=map_params)
-        print(pic.url)
+        print('>> Image URL:', pic.url)
 
         if pic.content and l != 'sat':
             with open("main_image.png", 'wb') as f:
