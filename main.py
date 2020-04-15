@@ -21,13 +21,14 @@ step = 0.0005
 
 
 def upd_map():
-    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
+    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap, pt=flags)
 
 
 def get_image_from_toponym(req):
     global actual_cords, metadata
     actual_cords, metadata = get_cords(req)
-    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
+    flags.append(actual_cords)
+    get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap, pt=flags)
 
 
 get_image_from_toponym('Moscow')
