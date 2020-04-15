@@ -9,7 +9,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QFileDialog, QLi
 
 # ------------------------ global variable -------------------------
 
-actual_cords = [0, 0]
+actual_cords, metadata = [0, 0], []
 zoom = 9
 lmap = 'map'
 flags = []
@@ -24,8 +24,8 @@ def upd_map():
 
 
 def get_image_from_toponym(req):
-    global actual_cords
-    actual_cords = get_cords(req)
+    global actual_cords, metadata
+    actual_cords, metadata = get_cords(req)
     get_image(actual_cords[0], actual_cords[1], zoom=zoom, l=lmap)
 
 
@@ -138,9 +138,27 @@ class Example(QWidget):
         key_pagedown.action = 'zoomminus'
         key_pagedown.activated.connect(self.onClick)
 
+        self.fullAdress = QTextEdit(self)
+        self.fullAdress.setGeometry(0, 50, SCREEN_SIZE[0], 25)
+        self.fullAdress.setReadOnly(True)
+
     def updateUI(self):
         self.draw = QPixmap(self.image)
         self.image1.setPixmap(self.draw)
+        self.fullAdress.setPlainText(self.fulladdressrenderer(metadata))
+
+    def fulladdressrenderer(self, metadata):
+        print(metadata)
+
+        final, ishouse = '', False
+        for i in metadata:
+            kind, name = i['kind'], i['name']
+            if kind == 'house':
+                ishouse = True
+            template = '%s: %s; ' % (kind, name)
+            final += template
+        return final
+
 
     def onClick(self):
         global zoom, actual_cords, lmap

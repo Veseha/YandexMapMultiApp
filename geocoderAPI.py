@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import requests
 
 
@@ -14,5 +16,5 @@ def get_cords(toponym_to_find, apikey='40d1649f-0493-4b70-98ba-98533de7710b', fo
     toponym = json_response["response"]["GeoObjectCollection"][
         "featureMember"][0]["GeoObject"]
     toponym_coodrinates = toponym["Point"]["pos"]
-    # print(toponym_coodrinates)
-    return toponym_coodrinates.split()
+    metadata = toponym['metaDataProperty']['GeocoderMetaData']['Address']['Components']
+    return toponym_coodrinates.split(), metadata
