@@ -16,6 +16,7 @@ flags = []
 SCREEN_SIZE = [600, 550]
 step = 0.0005
 
+
 # ------------------------------ func -----------------------------
 
 
@@ -49,7 +50,7 @@ class Example(QWidget):
         self.image1.move(0, 100)
         self.image1.resize(600, 450)
         self.image1.setPixmap(self.draw)
-        self.image1.mouseReleaseEvent = self.myfunction
+        #        self.image1.mouseReleaseEvent = self.myfunction
 
         self.searchbar = QTextEdit(self)
         self.searchbar.setAcceptRichText(False)
@@ -159,13 +160,12 @@ class Example(QWidget):
             final += template
         return final
 
-
     def onClick(self):
         global zoom, actual_cords, lmap
         try:
             # ------------------------------ print('zoom is', zoom, 'cords are', actual_cords)
             if self.sender().action == 'start_search':
-                flags.append()
+                # flags.append()
                 get_image_from_toponym(self.searchbar.toPlainText())
 
                 self.updateUI()
@@ -218,6 +218,10 @@ class Example(QWidget):
             self.updateUI()
         except Exception as e:
             print('error in onClick(), stack:', e)
+
+    def mousePressEvent(self, event):
+        print(event.button())
+        print(event.pos())
 
 
 if __name__ == '__main__':
