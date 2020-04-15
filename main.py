@@ -138,6 +138,11 @@ class Example(QWidget):
         key_left.action = 'left'
         key_left.activated.connect(self.onClick)
 
+        self.clear = QPushButton(self, text='Del flag')
+        self.clear.setGeometry(460, 0, 60, 25)
+        self.clear.action = 'clearflag'
+        self.clear.clicked.connect(self.onClick)
+
         key_pagedown = QShortcut(QKeySequence('PgDown'), self)
         key_pagedown.action = 'zoomminus'
         key_pagedown.activated.connect(self.onClick)
@@ -167,6 +172,10 @@ class Example(QWidget):
         global zoom, actual_cords, lmap
         try:
             # ------------------------------ print('zoom is', zoom, 'cords are', actual_cords)
+            if self.sender().action == 'clearflag':
+                global flags
+                flags = []
+                upd_map()
             if self.sender().action == 'start_search':
                 # flags.append()
                 get_image_from_toponym(self.searchbar.toPlainText())
